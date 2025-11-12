@@ -36,4 +36,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
     # Optionally add DRF login for the browsable API
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
+    path('', views.api_root),  # This makes the root URL point to the API
 ]
