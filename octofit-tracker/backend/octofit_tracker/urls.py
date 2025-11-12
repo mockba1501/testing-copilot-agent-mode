@@ -17,7 +17,23 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+# Register REST API routes using DRF routers so /api/... endpoints exist.
+from rest_framework import routers
+from . import views
+
+router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'teams', views.TeamViewSet)
+router.register(r'activities', views.ActivityViewSet)
+router.register(r'workouts', views.WorkoutViewSet)
+router.register(r'leaderboard', views.LeaderboardViewSet)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('octofit_tracker.urls')),
+    # API root (exact '/api/') returns a listing from views.api_root
+    path('api/', views.api_root, name='api-root'),
+    # Include router-managed viewsets under /api/
+    path('api/', include(router.urls)),
+    # Optionally add DRF login for the browsable API
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
